@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>D3 Bar Chart</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        /* Add CSS styles for the chart here */
+    </style>
+</head>
+
+<body>
+  <body>
+    <div class="container">
+      <div id="d2_plot">
+        <div id="Plot_title">
+          <h2>D3.js Chart - Chelsea Football Seasons 2010-2020</h2>
+        </div>
+        <div id="svg-area"></div>
+      </div>
+    </div><div>
+    <script> 
+var margin = {
+  top: 15,
+  bottom: 15,
+  left: 70,
+  right: 15
+}
+// Data for the chart
+var data = [{
+      year: 2010,
+      points: 80
+  },
+  {
+      year: 2011,
+      points: 70
+  },
+  {
+      year: 2012,
+      points: 90
+  },
+  {
+      year: 2013,
+      points: 85
+  },
+  {
+      year: 2014,
+      points: 75
+  },
+  {
+      year: 2015,
+      points: 95
+  },
+  {
+      year: 2016,
+      points: 80
+  },
+  {
+      year: 2017,
+      points: 90
+  },
+  {
+      year: 2018,
+      points: 95
+  },
+  {
+      year: 2019,
+      points: 85
+  },
+  {
+      year: 2020,
+      points: 75
+  }
+]
+var width = 900;
+var height = 600;
+
+var margin = {
+top: 15,
+bottom: 15,
+left: 70,
+right: 15
+};
+
+var svg = d3.select("#svg-area")
+.append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var x = d3.scaleBand()
+.domain(data.map(function(d) {
+return d.year;
+}))
+.range([margin.left, width - margin.right])
+.padding(0.1);
+
+var y = d3.scaleLinear()
+.domain([0, d3.max(data, function(d) {
+return d.points;
+})])
+.range([height - margin.bottom, margin.top]);
+
+var xAxis = d3.axisBottom(x);
+var yAxis = d3.axisLeft(y);
+
+svg.append("g")
+.attr("transform", "translate(0," + (height - margin.bottom) + ")")
+.call(xAxis);
+
+svg.append("g")
+.attr("transform", "translate(" + margin.left + ",0)")
+.call(yAxis);
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var bars = svg.selectAll(".bar")
+.data(data)
+.enter()
+.append("rect")
+.attr("class", "bar")
+.attr("x", function(d) {
+return x(d.year);
+})
+.attr("y", function(d) {
+return y(d.points);
+})
+.attr("width", x.bandwidth())
+.attr("height", function(d) {
+return height - margin.bottom - y(d.points);
+});
+
+bars.style("fill", function(d) {
+return color(d3.randomUniform(0, 1)());
+});
+
+setInterval(function() {
+bars.style("fill", function(d) {
+return color(d3.randomUniform(0, 1)());
+});
+}, 1000);
+
+svg.append("text")
+.attr("x", width/2)
+.attr("y", height + margin.top)
+.style("text-anchor", "middle")
+.text("Season Year");
+
+svg.append("text")
+.attr("transform", "rotate(-90)")
+.attr("y", -margin.bottom - 20)
+.attr("x", -margin.top - height / 2)
+.style("text-anchor", "middle")
+.text("Points Per Season");
+  
+</script>
+</div>
